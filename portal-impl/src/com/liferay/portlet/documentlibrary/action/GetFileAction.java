@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.action;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
@@ -197,9 +199,18 @@ public class GetFileAction extends PortletAction {
 					groupId, folderId, title);
 			}
 			else if (Validator.isNotNull(name)) {
-				DLFileEntry dlFileEntry =
-					DLFileEntryLocalServiceUtil.fetchFileEntryByName(
-						groupId, folderId, name);
+				DLFileEntry dlFileEntry = null;
+
+				try {
+					dlFileEntry = DLFileEntryLocalServiceUtil
+						.getFileEntryByName(groupId, folderId, name);
+				}catch(NoSuchFileEntryException e) {
+					if (_log.isWarnEnabled()) {
+						_log.warn("No dlFileEntry exists with the groupId: " +
+							groupId +" folderId: "+ folderId + " name: " +
+							name);
+					}
+				}
 
 				if (dlFileEntry == null) {
 
@@ -315,5 +326,6 @@ public class GetFileAction extends PortletAction {
 	}
 
 	private static final boolean _CHECK_METHOD_ON_PROCESS_ACTION = false;
+	private static Log _log = LogFactoryUtil.getLog(GetFileAction.class);
 
 }
