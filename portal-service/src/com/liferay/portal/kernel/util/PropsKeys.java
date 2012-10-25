@@ -2345,6 +2345,8 @@ public interface PropsKeys {
 
 	public static final String VIRTUAL_HOSTS_IGNORE_PATHS = "virtual.hosts.ignore.paths";
 
+	public static final String VIRTUAL_HOSTS_LAYOUT_FRIENDLY_URL_MAX_LENGTH = "virtual.hosts.layout.friendly.url.max.length";
+
 	public static final String WEB_SERVER_DISPLAY_NODE = "web.server.display.node";
 
 	public static final String WEB_SERVER_HOST = "web.server.host";

@@ -1728,6 +1728,8 @@ public class PropsValues {
 	public static final String VIRTUAL_HOSTS_DEFAULT_SITE_NAME = PropsUtil.get(PropsKeys.VIRTUAL_HOSTS_DEFAULT_SITE_NAME);
 
 	public static final String[] VIRTUAL_HOSTS_IGNORE_EXTENSIONS = PropsUtil.getArray(PropsKeys.VIRTUAL_HOSTS_IGNORE_EXTENSIONS);
+	
+	public static final int VIRTUAL_HOSTS_LAYOUT_FRIENDLY_URL_MAX_LENGTH = GetterUtil.getInteger(PropsUtil.get(PropsKeys.VIRTUAL_HOSTS_LAYOUT_FRIENDLY_URL_MAX_LENGTH));
 
 	public static final boolean WEB_SERVER_DISPLAY_NODE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WEB_SERVER_DISPLAY_NODE));
 
