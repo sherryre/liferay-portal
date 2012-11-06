@@ -2023,7 +2023,7 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 				}
 			}
 
-			if (!allowed) {
+			if (!(allowed || organizations.isEmpty())) {
 				throw new PrincipalException();
 			}
 		}
