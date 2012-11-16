@@ -66,8 +66,8 @@ public class JournalArticleWorkflowHandler extends BaseWorkflowHandler {
 		ServiceContext serviceContext = (ServiceContext)workflowContext.get(
 			"serviceContext");
 
-		String articleURL = PortalUtil.getControlPanelFullURL(
-			serviceContext.getScopeGroupId(), PortletKeys.JOURNAL, null);
+		String articleURL = PortalUtil.getControlPanelEmailURL(
+			serviceContext.getPortalURL(), PortletKeys.JOURNAL, null);
 
 		return JournalArticleLocalServiceUtil.updateStatus(
 			userId, article, status, articleURL, serviceContext);

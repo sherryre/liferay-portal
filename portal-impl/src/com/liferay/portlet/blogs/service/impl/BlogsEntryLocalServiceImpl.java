@@ -1247,9 +1247,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			return;
 		}
 
-		String layoutFullURL = serviceContext.getLayoutFullURL();
+		String emailURL = serviceContext.getEmailURL();
 
-		if (Validator.isNull(layoutFullURL)) {
+		if (Validator.isNull(emailURL)) {
 			return;
 		}
 
@@ -1279,7 +1279,7 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		}
 
 		String entryURL =
-			layoutFullURL + Portal.FRIENDLY_URL_SEPARATOR + "blogs" +
+			emailURL + Portal.FRIENDLY_URL_SEPARATOR + "blogs" +
 				StringPool.SLASH + entry.getEntryId();
 
 		String fromName = BlogsUtil.getEmailFromName(

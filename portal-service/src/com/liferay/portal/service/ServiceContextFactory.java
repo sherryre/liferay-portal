@@ -63,6 +63,8 @@ public class ServiceContextFactory {
 
 		if (themeDisplay != null) {
 			serviceContext.setCompanyId(themeDisplay.getCompanyId());
+			serviceContext.setEmailURL(
+				PortalUtil.getLayoutFullURL(themeDisplay));
 			serviceContext.setLanguageId(themeDisplay.getLanguageId());
 			serviceContext.setLayoutFullURL(
 				PortalUtil.getCanonicalURL(

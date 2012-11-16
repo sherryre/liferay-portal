@@ -342,6 +342,13 @@ public class PortalUtil {
 		return getPortal().getControlPanelCategory(portletId, themeDisplay);
 	}
 
+	public static String getControlPanelEmailURL(
+			String portalURL, String ppid, Map<String, String[]> params)
+		throws PortalException, SystemException {
+
+		return getPortal().getControlPanelEmailURL(portalURL, ppid, params);
+	}
+
 	public static String getControlPanelFullURL(
 			long scopeGroupId, String ppid, Map<String, String[]> params)
 		throws PortalException, SystemException {

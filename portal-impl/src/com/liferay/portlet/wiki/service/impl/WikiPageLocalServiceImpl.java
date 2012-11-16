@@ -1783,7 +1783,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		}
 
 		String portalURL = serviceContext.getPortalURL();
-		String layoutFullURL = serviceContext.getLayoutFullURL();
+		String emailURL = serviceContext.getEmailURL();
 
 		WikiPage previousVersionPage = getPreviousVersionPage(page);
 
@@ -1816,16 +1816,16 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		String pageURL = StringPool.BLANK;
 		String diffsURL = StringPool.BLANK;
 
-		if (Validator.isNotNull(layoutFullURL)) {
+		if (Validator.isNotNull(emailURL)) {
 			pageURL =
-				layoutFullURL + Portal.FRIENDLY_URL_SEPARATOR + "wiki/" +
+				emailURL + Portal.FRIENDLY_URL_SEPARATOR + "wiki/" +
 					node.getNodeId() + StringPool.SLASH +
 						HttpUtil.encodeURL(page.getTitle());
 
 			if (previousVersionPage != null) {
 				StringBundler sb = new StringBundler(16);
 
-				sb.append(layoutFullURL);
+				sb.append(emailURL);
 				sb.append("?p_p_id=");
 				sb.append(PortletKeys.WIKI);
 				sb.append("&p_p_state=");

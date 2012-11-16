@@ -92,6 +92,7 @@ public class ServiceContext implements Cloneable, Serializable {
 		serviceContext.setCompanyId(getCompanyId());
 		serviceContext.setCreateDate(getCreateDate());
 		serviceContext.setCurrentURL(getCurrentURL());
+		serviceContext.setEmailURL(getEmailURL());
 		serviceContext.setExpandoBridgeAttributes(getExpandoBridgeAttributes());
 		serviceContext.setGroupPermissions(getGroupPermissions());
 		serviceContext.setGuestPermissions(getGuestPermissions());
@@ -310,6 +311,15 @@ public class ServiceContext implements Cloneable, Serializable {
 	 */
 	public String getCurrentURL() {
 		return _currentURL;
+	}
+
+	/**
+	 * Returns the Email URL of this service context
+	 *
+	 * @return the Email URL
+	 */
+	public String getEmailURL() {
+		return _emailURL;
 	}
 
 	/**
@@ -908,6 +918,15 @@ public class ServiceContext implements Cloneable, Serializable {
 	}
 
 	/**
+	 * Sets the Email URL of this service context
+	 *
+	 * @param emailURL the Email URL of this service context
+	 */
+	public void setEmailURL(String emailURL) {
+		_emailURL = emailURL;
+	}
+
+	/**
 	 * Sets an arbitrary number of attributes of an entity to be persisted.
 	 *
 	 * <p>
@@ -1227,6 +1246,7 @@ public class ServiceContext implements Cloneable, Serializable {
 	private Date _createDate;
 	private String _currentURL;
 	private boolean _deriveDefaultPermissions;
+	private String _emailURL;
 	private Map<String, Serializable> _expandoBridgeAttributes;
 	private Date _formDate;
 	private String[] _groupPermissions;

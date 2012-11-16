@@ -469,6 +469,10 @@ public interface Portal {
 			String portletId, ThemeDisplay themeDisplay)
 		throws SystemException;
 
+	public String getControlPanelEmailURL(
+			String portalURL, String ppid, Map<String, String[]> params)
+		throws PortalException, SystemException;
+
 	public String getControlPanelFullURL(
 			long scopeGroupId, String ppid, Map<String, String[]> params)
 		throws PortalException, SystemException;

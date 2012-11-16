@@ -1345,6 +1345,35 @@ public class PortalImpl implements Portal {
 		return StringPool.BLANK;
 	}
 
+	public String getControlPanelEmailURL(
+			String portalURL, String ppid, Map<String, String[]> params)
+		throws PortalException, SystemException {
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(portalURL);
+		sb.append(getPathFriendlyURLPrivateGroup());
+		sb.append(GroupConstants.CONTROL_PANEL_FRIENDLY_URL);
+		sb.append(PropsValues.CONTROL_PANEL_LAYOUT_FRIENDLY_URL);
+
+		if (params != null) {
+			params = new HashMap<String, String[]>(params);
+		}
+		else {
+			params = new HashMap<String, String[]>();
+		}
+
+		params.put("p_p_id", new String[] {ppid});
+		params.put("p_p_lifecycle", new String[] {"0"});
+		params.put(
+			"p_p_state", new String[] {WindowState.MAXIMIZED.toString()});
+		params.put("p_p_mode", new String[] {PortletMode.VIEW.toString()});
+
+		sb.append(HttpUtil.parameterMapToString(params, true));
+
+		return sb.toString();
+	}
+
 	public String getControlPanelFullURL(
 			long scopeGroupId, String ppid, Map<String, String[]> params)
 		throws PortalException, SystemException {

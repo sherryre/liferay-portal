@@ -3253,8 +3253,8 @@ public class JournalArticleLocalServiceImpl
 			return;
 		}
 
-		String articleURL = PortalUtil.getControlPanelFullURL(
-			serviceContext.getScopeGroupId(), PortletKeys.JOURNAL, null);
+		String articleURL = PortalUtil.getControlPanelEmailURL(
+			serviceContext.getPortalURL(), PortletKeys.JOURNAL, null);
 
 		if (Validator.isNull(articleURL)) {
 			return;

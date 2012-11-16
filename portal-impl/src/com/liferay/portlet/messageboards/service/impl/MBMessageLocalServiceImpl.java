@@ -1825,7 +1825,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			return;
 		}
 
-		String contentURL = (String)serviceContext.getAttribute("contentURL");
+		String contentURL = serviceContext.getCurrentURL();
 
 		String userAddress = StringPool.BLANK;
 		String userName = (String)serviceContext.getAttribute(
@@ -1877,9 +1877,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			MBMessage message, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		String layoutFullURL = serviceContext.getLayoutFullURL();
+		String emailURL = serviceContext.getEmailURL();
 
-		if (!message.isApproved() || Validator.isNull(layoutFullURL)) {
+		if (!message.isApproved() || Validator.isNull(emailURL)) {
 			return;
 		}
 
@@ -1957,7 +1957,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		}
 
 		String messageURL =
-			layoutFullURL + Portal.FRIENDLY_URL_SEPARATOR +
+			emailURL + Portal.FRIENDLY_URL_SEPARATOR +
 				"message_boards/view_message/" + message.getMessageId();
 
 		String fromName = MBUtil.getEmailFromName(
