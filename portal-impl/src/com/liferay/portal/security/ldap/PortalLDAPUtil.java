@@ -14,6 +14,8 @@
 
 package com.liferay.portal.security.ldap;
 
+import com.liferay.portal.NoSuchUserGroupException;
+import com.liferay.portal.kernel.ldap.LDAPUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogUtil;
@@ -27,13 +29,17 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CompanyConstants;
+import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.naming.Binding;
 import javax.naming.CompositeName;
@@ -273,6 +279,46 @@ public class PortalLDAPUtil {
 
 		return PrefsPropsUtil.getString(
 			companyId, PropsKeys.LDAP_GROUPS_DN + postfix);
+	}
+
+	public static Set<Long> getLDAPGroupIds(
+			long ldapServerId, long companyId, LdapContext ldapContext)
+		throws Exception {
+
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+
+		PortalLDAPUtil.getGroups(
+			ldapServerId, companyId, ldapContext, new byte[0], 0,
+			searchResults);
+
+		Properties groupMappings = LDAPSettingsUtil.getGroupMappings(
+				ldapServerId, companyId);
+
+		Set<Long> ldapGroupIds = new LinkedHashSet<Long>();;
+
+		for (SearchResult searchResult : searchResults) {
+
+			String groupName = LDAPUtil.getAttributeString(
+				searchResult.getAttributes(),
+				groupMappings.getProperty("groupName")).toLowerCase();
+
+			UserGroup userGroup = null;
+
+			try {
+				userGroup = UserGroupLocalServiceUtil.getUserGroup(
+					companyId, groupName);
+
+			} catch (NoSuchUserGroupException nsge) {
+				_log.info(nsge.getMessage());
+			}
+
+			if (Validator.isNotNull(userGroup)) {
+				ldapGroupIds.add(userGroup.getUserGroupId());
+			}
+
+		}
+
+		return ldapGroupIds;
 	}
 
 	public static long getLdapServerId(

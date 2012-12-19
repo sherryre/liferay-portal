@@ -532,14 +532,15 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 	}
 
 	protected void addUserGroupsNotAddedByLDAPImport(
-			long userId, Set<Long> userGroupIds)
+			long userId, Set<Long> ldapGroupIds, Set<Long> userGroupIds)
 		throws Exception {
 
 		List<UserGroup> userGroups =
 			UserGroupLocalServiceUtil.getUserUserGroups(userId);
 
 		for (UserGroup userGroup : userGroups) {
-			if (!userGroup.isAddedByLDAPImport()) {
+			if (!userGroup.isAddedByLDAPImport()&&
+				!ldapGroupIds.contains(userGroup.getUserGroupId())) {
 				userGroupIds.add(userGroup.getUserGroupId());
 			}
 		}
@@ -858,7 +859,11 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			}
 		}
 
-		addUserGroupsNotAddedByLDAPImport(user.getUserId(), newUserGroupIds);
+		Set<Long> ldapGroupIds = PortalLDAPUtil.getLDAPGroupIds(
+				ldapServerId, companyId, ldapContext);
+
+		addUserGroupsNotAddedByLDAPImport(
+				user.getUserId(), ldapGroupIds, newUserGroupIds);
 
 		for (long newUserGroupId : newUserGroupIds) {
 			UserLocalServiceUtil.addUserGroupUsers(
