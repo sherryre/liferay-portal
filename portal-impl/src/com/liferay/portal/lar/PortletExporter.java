@@ -1504,10 +1504,10 @@ public class PortletExporter {
 				updateAssetPublisherClassNameIds(jxPreferences, name);
 			}
 			else if (name.equals("defaultScope") || name.equals("scopeIds")) {
-				updateAssetPublisherScopeIds(jxPreferences, name, plid);
+				updateAssetPublisherGlobalScopeId(jxPreferences, name, plid);
 			}
 			else if (name.startsWith("queryName") &&
-					 value.equalsIgnoreCase("assetCategories")) {
+				value.equalsIgnoreCase("assetCategories")) {
 
 				String index = name.substring(9);
 
@@ -1520,7 +1520,7 @@ public class PortletExporter {
 		return PortletPreferencesFactoryUtil.toXML(jxPreferences);
 	}
 
-	protected void updateAssetPublisherScopeIds(
+	protected void updateAssetPublisherGlobalScopeId(
 			javax.portlet.PortletPreferences jxPreferences, String key,
 			long plid)
 		throws Exception {
