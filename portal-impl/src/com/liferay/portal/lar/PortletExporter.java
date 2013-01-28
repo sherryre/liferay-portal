@@ -1525,9 +1525,9 @@ public class PortletExporter {
 			long plid)
 		throws Exception {
 
-		String[] oldValues = jxPreferences.getValues(key, null);
+		String[] oldScopeIds = jxPreferences.getValues(key, null);
 
-		if (oldValues == null) {
+		if (oldScopeIds == null) {
 			return;
 		}
 
@@ -1542,20 +1542,16 @@ public class PortletExporter {
 			AssetPublisherUtil.SCOPE_ID_GROUP_PREFIX +
 				companyGroup.getGroupId();
 
-		String layoutScopeId =
-			AssetPublisherUtil.SCOPE_ID_LAYOUT_PREFIX + layout.getLayoutId();
+		String[] newScopeIds = new String[oldScopeIds.length];
 
-		String[] newValues = new String[oldValues.length];
+		for (int i = 0; i < oldScopeIds.length; i++) {
+			String oldScopeId = oldScopeIds[i];
 
-		for (int i = 0; i < oldValues.length; i++) {
-			String oldValue = oldValues[i];
-
-			newValues[i] = StringUtil.replace(
-				oldValue, new String[] {groupScopeId, layoutScopeId},
-				new String[] {"[$GROUP_SCOPE_ID$]", "[$LAYOUT_SCOPE_ID$]"});
+			newScopeIds[i] = StringUtil.replace(
+				oldScopeId, groupScopeId, "[$GROUP_SCOPE_ID$]");
 		}
 
-		jxPreferences.setValues(key, newValues);
+		jxPreferences.setValues(key, newScopeIds);
 	}
 
 	protected void updatePreferencesClassPKs(
