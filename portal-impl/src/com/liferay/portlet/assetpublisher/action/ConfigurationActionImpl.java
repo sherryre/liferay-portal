@@ -109,7 +109,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 					removeScope(actionRequest, preferences);
 				}
 				else if (cmd.equals("select-scope")) {
-					setScopes(actionRequest, preferences);
+					setScope(actionRequest, preferences);
 				}
 				else if (cmd.equals("selection-style")) {
 					setSelectionStyle(actionRequest, preferences);
@@ -351,7 +351,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		preferences.setValues("assetEntryXml", newEntries);
 	}
 
-	protected void setScopes(
+	protected void setScope(
 			ActionRequest actionRequest, PortletPreferences preferences)
 		throws Exception {
 
