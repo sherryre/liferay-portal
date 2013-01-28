@@ -68,7 +68,7 @@ String editorParam = emailParam + "Body_" + currentLanguageId;
 	</liferay-util:buffer>
 
 	<liferay-util:buffer var="selectScope">
-		<aui:select label="" name="preferences--defaultScope--" onChange='<%= renderResponse.getNamespace() + "selectScope();" %>'>
+		<aui:select label="" name="preferences--scopeId--" onChange='<%= renderResponse.getNamespace() + "selectScope();" %>'>
 
 			<%
 			long layoutScopeGroupId = 0;
