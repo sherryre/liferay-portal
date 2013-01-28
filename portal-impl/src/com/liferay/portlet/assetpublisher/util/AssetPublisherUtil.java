@@ -489,8 +489,7 @@ public class AssetPublisherUtil {
 		Layout layout) {
 
 		String[] scopeIds = portletPreferences.getValues(
-				"scopeIds",
-				new String[] {SCOPE_ID_GROUP_PREFIX + scopeGroupId});
+			"scopeIds", new String[] {SCOPE_ID_GROUP_PREFIX + scopeGroupId});
 
 		long[] groupIds = new long[scopeIds.length];
 

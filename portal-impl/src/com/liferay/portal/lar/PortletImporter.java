@@ -1820,7 +1820,7 @@ public class PortletImporter {
 					companyGroup.getGroupId());
 			}
 			else if (name.equals("anyAssetType") ||
-					 name.equals("classNameIds")) {
+					name.equals("classNameIds")) {
 
 				updateAssetPublisherClassNameIds(jxPreferences, name);
 			}
@@ -1879,7 +1879,7 @@ public class PortletImporter {
 
 				newScopeIds[i] =
 					AssetPublisherUtil.SCOPE_ID_LAYOUT_PREFIX +
-					newLayout.getLayoutId();
+						newLayout.getLayoutId();
 			}
 			else {
 				newScopeIds[i] = StringUtil.replace(

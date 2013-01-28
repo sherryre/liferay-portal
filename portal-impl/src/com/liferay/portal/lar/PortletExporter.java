@@ -1474,52 +1474,6 @@ public class PortletExporter {
 		jxPreferences.setValues(key, newValues);
 	}
 
-	protected String updateAssetPublisherPortletPreferences(
-			String xml, long plid)
-		throws Exception {
-
-		javax.portlet.PortletPreferences jxPreferences =
-			PortletPreferencesFactoryUtil.fromDefaultXML(xml);
-
-		Enumeration<String> enu = jxPreferences.getNames();
-
-		while (enu.hasMoreElements()) {
-			String name = enu.nextElement();
-
-			String value = GetterUtil.getString(
-				jxPreferences.getValue(name, null));
-
-			if (name.equals(
-					"anyClassTypeJournalArticleAssetRendererFactory") ||
-				name.equals(
-					"classTypeIdsJournalArticleAssetRendererFactory") ||
-				name.equals("classTypeIds")) {
-
-				updatePreferencesClassPKs(
-					jxPreferences, name, DDMStructure.class.getName());
-			}
-			else if (name.equals("anyAssetType") ||
-					 name.equals("classNameIds")) {
-
-				updateAssetPublisherClassNameIds(jxPreferences, name);
-			}
-			else if (name.equals("scopeIds")) {
-				updateAssetPublisherGlobalScopeId(jxPreferences, name, plid);
-			}
-			else if (name.startsWith("queryName") &&
-				value.equalsIgnoreCase("assetCategories")) {
-
-				String index = name.substring(9);
-
-				updatePreferencesClassPKs(
-					jxPreferences, "queryValues" + index,
-					AssetCategory.class.getName());
-			}
-		}
-
-		return PortletPreferencesFactoryUtil.toXML(jxPreferences);
-	}
-
 	protected void updateAssetPublisherGlobalScopeId(
 			javax.portlet.PortletPreferences jxPreferences, String key,
 			long plid)
@@ -1552,6 +1506,52 @@ public class PortletExporter {
 		}
 
 		jxPreferences.setValues(key, newScopeIds);
+	}
+
+	protected String updateAssetPublisherPortletPreferences(
+			String xml, long plid)
+		throws Exception {
+
+		javax.portlet.PortletPreferences jxPreferences =
+			PortletPreferencesFactoryUtil.fromDefaultXML(xml);
+
+		Enumeration<String> enu = jxPreferences.getNames();
+
+		while (enu.hasMoreElements()) {
+			String name = enu.nextElement();
+
+			String value = GetterUtil.getString(
+				jxPreferences.getValue(name, null));
+
+			if (name.equals(
+					"anyClassTypeJournalArticleAssetRendererFactory") ||
+				name.equals(
+					"classTypeIdsJournalArticleAssetRendererFactory") ||
+				name.equals("classTypeIds")) {
+
+				updatePreferencesClassPKs(
+					jxPreferences, name, DDMStructure.class.getName());
+			}
+			else if (name.equals("anyAssetType") ||
+					name.equals("classNameIds")) {
+
+				updateAssetPublisherClassNameIds(jxPreferences, name);
+			}
+			else if (name.equals("scopeIds")) {
+				updateAssetPublisherGlobalScopeId(jxPreferences, name, plid);
+			}
+			else if (name.startsWith("queryName") &&
+					value.equalsIgnoreCase("assetCategories")) {
+
+				String index = name.substring(9);
+
+				updatePreferencesClassPKs(
+					jxPreferences, "queryValues" + index,
+					AssetCategory.class.getName());
+			}
+		}
+
+		return PortletPreferencesFactoryUtil.toXML(jxPreferences);
 	}
 
 	protected void updatePreferencesClassPKs(

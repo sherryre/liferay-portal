@@ -356,10 +356,9 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		throws Exception {
 
 		String scopeId = getParameter(actionRequest, "scopeId");
-		String[] scopeIds = new String[]{scopeId};
 
-		preferences.setValue("defaultScope", StringPool.TRUE);
-		preferences.setValues("scopeIds", scopeIds);
+		preferences.setValue("defaultScope", Boolean.TRUE.toString());
+		preferences.setValues("scopeIds", new String[] {scopeId});
 	}
 
 	protected void setSelectionStyle(
