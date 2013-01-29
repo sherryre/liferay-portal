@@ -181,17 +181,18 @@ public class MBUtil {
 			RenderResponse renderResponse)
 		throws Exception {
 
-		if ((message.getCategoryId() ==
-				MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) ||
-			(message.getCategoryId() ==
-				MBCategoryConstants.DISCUSSION_CATEGORY_ID)) {
+		if (message.getCategoryId() ==
+			MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
 
 			return;
 		}
+		else if (message.getCategoryId() !=
+			MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {
 
-		MBCategory category = message.getCategory();
+			MBCategory category = message.getCategory();
 
-		addPortletBreadcrumbEntries(category, request, renderResponse);
+			addPortletBreadcrumbEntries(category, request, renderResponse);
+		}
 
 		PortletURL portletURL = renderResponse.createRenderURL();
 
