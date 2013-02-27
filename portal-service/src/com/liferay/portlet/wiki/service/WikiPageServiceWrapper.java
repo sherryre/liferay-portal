@@ -175,8 +175,7 @@ public class WikiPageServiceWrapper implements WikiPageService,
 	public java.lang.String getNodePagesRSS(long nodeId, int max,
 		java.lang.String type, double version, java.lang.String displayStyle,
 		java.lang.String feedURL, java.lang.String entryURL)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws java.lang.Exception {
 		return _wikiPageService.getNodePagesRSS(nodeId, max, type, version,
 			displayStyle, feedURL, entryURL);
 	}
@@ -249,8 +248,7 @@ public class WikiPageServiceWrapper implements WikiPageService,
 		java.lang.String title, int max, java.lang.String type, double version,
 		java.lang.String displayStyle, java.lang.String feedURL,
 		java.lang.String entryURL, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws java.lang.Exception {
 		return _wikiPageService.getPagesRSS(companyId, nodeId, title, max,
 			type, version, displayStyle, feedURL, entryURL, locale);
 	}
