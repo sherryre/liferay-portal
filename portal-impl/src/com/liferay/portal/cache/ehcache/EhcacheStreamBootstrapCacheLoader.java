@@ -14,19 +14,16 @@
 
 package com.liferay.portal.cache.ehcache;
 
-import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InitialThreadLocal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.bootstrap.BootstrapCacheLoader;
 
@@ -46,8 +43,6 @@ public class EhcacheStreamBootstrapCacheLoader implements BootstrapCacheLoader {
 
 	public static synchronized void start() {
 		if (!_started) {
-			updateDeferredEhcaches();
-
 			_started = true;
 		}
 
@@ -57,12 +52,16 @@ public class EhcacheStreamBootstrapCacheLoader implements BootstrapCacheLoader {
 
 		try {
 			EhcacheStreamBootstrapHelpUtil.loadCachesFromCluster(
-				_deferredEhcaches);
+				true,
+				_deferredEhcaches.toArray(
+					new Ehcache[_deferredEhcaches.size()]));
 		}
 		catch (Exception e) {
 			throw new CacheException(e);
 		}
-
+		finally {
+			_deferredEhcaches.clear();
+		}
 	}
 
 	public EhcacheStreamBootstrapCacheLoader(Properties properties) {
@@ -95,10 +94,8 @@ public class EhcacheStreamBootstrapCacheLoader implements BootstrapCacheLoader {
 		}
 
 		try {
-			List<Ehcache> ehcaches = new ArrayList<Ehcache>();
-			ehcaches.add(ehcache);
-
-			EhcacheStreamBootstrapHelpUtil.loadCachesFromCluster(ehcaches);
+			EhcacheStreamBootstrapHelpUtil.loadCachesFromCluster(
+				false, ehcache);
 		}
 		catch (Exception e) {
 			throw new CacheException(e);
@@ -122,49 +119,6 @@ public class EhcacheStreamBootstrapCacheLoader implements BootstrapCacheLoader {
 			doLoad(ehcache);
 		}
 	}
-
-	private static void updateDeferredEhcaches() {
-
-		List<String> clusterCacheNames;
-		try {
-			clusterCacheNames =
-				EhcacheStreamBootstrapHelpUtil.loadCacheNamesFromCluster();
-		}
-		catch (Exception e) {
-			throw new CacheException(e);
-		}
-
-		if ((clusterCacheNames == null) || clusterCacheNames.isEmpty()) {
-			return;
-		}
-
-		EhcachePortalCacheManager<?, ?> ehcachePortalCacheManager =
-			(EhcachePortalCacheManager<?, ?>)PortalBeanLocatorUtil.locate(
-				_BEAN_NAME_MULTI_VM_PORTAL_CACHE_MANAGER);
-
-		CacheManager _portalCacheManager =
-			ehcachePortalCacheManager.getEhcacheManager();
-
-		List<String> localCacheNames = Arrays.asList(
-			_portalCacheManager.getCacheNames());
-
-		List<String> cacheNames = new ArrayList<String>();
-
-		cacheNames.addAll(clusterCacheNames);
-
-		cacheNames.removeAll(localCacheNames);
-
-		EhcacheStreamBootstrapCacheLoader.setSkip();
-
-		for (String cacheName : cacheNames) {
-			_portalCacheManager.addCache(cacheName);
-		}
-
-		EhcacheStreamBootstrapCacheLoader.resetSkip();
-	}
-
-	private static final String _BEAN_NAME_MULTI_VM_PORTAL_CACHE_MANAGER =
-		"com.liferay.portal.kernel.cache.MultiVMPortalCacheManager";
 
 	private static Log _log = LogFactoryUtil.getLog(
 		EhcacheStreamBootstrapCacheLoader.class);
