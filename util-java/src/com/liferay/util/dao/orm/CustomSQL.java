@@ -63,7 +63,7 @@ public class CustomSQL {
 		"CAST(? AS VARCHAR(32672)) IS NULL";
 
 	public static final boolean escapeWildCardsEnabled = GetterUtil.getBoolean(
-			PropsUtil.get(PropsKeys.CUSTOM_SQL_AUTO_ESCAPE_WILDCARDS_ENABLED));
+		PropsUtil.get(PropsKeys.CUSTOM_SQL_AUTO_ESCAPE_WILDCARDS_ENABLED));
 
 	public static final String INFORMIX_FUNCTION_IS_NOT_NULL =
 		"NOT lportal.isnull(?)";
@@ -113,35 +113,6 @@ public class CustomSQL {
 		}
 
 		return sql.concat(criteria);
-	}
-
-	private String escapeWildCards(String keywords) {
-		if (isVendorMySQL() || isVendorOracle()) {
-			StringBuilder sb = new StringBuilder(keywords);
-
-			for (int i = 0; i < sb.length(); ++i) {
-				if (sb.charAt(i) == '\\') {
-					i++;
-					continue;
-				}
-
-				if (sb.charAt(i) == '_') {
-					sb.insert(i,'\\');
-					i++;
-					continue;
-				}
-
-				if (sb.charAt(i) == '%') {
-					sb.insert(i,'\\');
-					i++;
-					continue;
-				}
-			}
-
-			keywords = sb.toString();
-		}
-
-		return keywords;
 	}
 
 	public String get(String id) {
@@ -818,6 +789,35 @@ public class CustomSQL {
 		}
 		catch (IOException ioe) {
 			return sql;
+		}
+
+		return sb.toString();
+	}
+
+	private String escapeWildCards(String keywords) {
+		if (!isVendorMySQL() && !isVendorOracle()) {
+			return keywords;
+		}
+
+		StringBuilder sb = new StringBuilder(keywords);
+
+		for (int i = 0; i < sb.length(); ++i) {
+			if (sb.charAt(i) == '\\') {
+				i++;
+				continue;
+			}
+
+			if (sb.charAt(i) == '_') {
+				sb.insert(i,'\\');
+				i++;
+				continue;
+			}
+
+			if (sb.charAt(i) == '%') {
+				sb.insert(i,'\\');
+				i++;
+				continue;
+			}
 		}
 
 		return sb.toString();
