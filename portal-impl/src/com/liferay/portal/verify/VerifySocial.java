@@ -14,54 +14,72 @@
 
 package com.liferay.portal.verify;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.social.model.SocialRequest;
 import com.liferay.portlet.social.service.SocialRequestLocalServiceUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.portlet.social.service.persistence.SocialRequestActionableDynamicQuery;
 
 /**
  * @author Bryan Engler
+ * @auther Sherry Yang
  */
 public class VerifySocial extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
-		List<SocialRequest> requests =
-			SocialRequestLocalServiceUtil.getSocialRequests(
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-		if (requests.isEmpty()) {
+		ActionableDynamicQuery socialRequestActionableDynamicQuery =
+			new SocialRequestActionableDynamicQuery() {
+
+			@Override
+			protected void addCriteria(DynamicQuery dynamicQuery) {
+				Property classNameId = PropertyFactoryUtil.forName(
+					"classNameId");
+
+				dynamicQuery.add(
+					classNameId.eq(PortalUtil.getClassNameId(Group.class)));
+
+				Property classPK = PropertyFactoryUtil.forName("classPK");
+
+				DynamicQuery groupIdDq = DynamicQueryFactoryUtil.forClass(
+					Group.class, PortalClassLoaderUtil.getClassLoader());
+
+				Projection groupIdProjection = ProjectionFactoryUtil.property(
+					"groupId");
+
+				groupIdDq.setProjection(groupIdProjection);
+
+				dynamicQuery.add(classPK.notIn(groupIdDq));
+			}
+
+			@Override
+			protected void performAction(Object object)
+				throws PortalException, SystemException {
+
+				SocialRequestLocalServiceUtil.deleteRequest(
+					(SocialRequest)object);
+			}
+
+		};
+
+		long requestCount = socialRequestActionableDynamicQuery.performCount();
+
+		if (requestCount == 0) {
 			return;
 		}
 
-		List<Group> groups = new ArrayList<Group>();
-
-		for (long companyId : PortalInstances.getCompanyIdsBySQL()) {
-			groups.addAll(
-				GroupLocalServiceUtil.getCompanyGroups(
-					companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS));
-		}
-
-		List<Long> groupIds = new ArrayList<Long>();
-
-		for (Group group : groups) {
-			groupIds.add(group.getGroupId());
-		}
-
-		for (SocialRequest request : requests) {
-			if (!groupIds.contains(request.getClassPK()) &&
-				(request.getClassNameId() ==
-					PortalUtil.getClassNameId(Group.class))) {
-
-				SocialRequestLocalServiceUtil.deleteRequest(request);
-			}
-		}
+		socialRequestActionableDynamicQuery.performActions();
 	}
 
 }
