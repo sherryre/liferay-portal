@@ -236,6 +236,14 @@ public class UploadImageAction extends PortletAction {
 				int x = jsonObject.getInt("x");
 				int y = jsonObject.getInt("y");
 
+				if (width + x > renderedImage.getWidth()) {
+					width = renderedImage.getWidth() - x;
+				}
+
+				if (height + y > renderedImage.getHeight()) {
+					height = renderedImage.getHeight() - y;
+				}
+
 				renderedImage = ImageToolUtil.crop(
 					renderedImage, height, width, x, y);
 			}
