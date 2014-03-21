@@ -59,7 +59,6 @@ import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadServiceUtil;
 import com.liferay.portlet.messageboards.service.permission.MBMessagePermission;
-import com.liferay.portlet.messageboards.util.MBUtil;
 
 import java.io.InputStream;
 
@@ -397,15 +396,6 @@ public class EditMessageAction extends PortletAction {
 			boolean preview = ParamUtil.getBoolean(actionRequest, "preview");
 
 			serviceContext.setAttribute("preview", preview);
-
-			boolean quickReply = ParamUtil.get(
-				actionRequest, "quickReply", false);
-
-			if (quickReply) {
-				MBUtil.permissionInheritance(
-					themeDisplay.getCompanyId(), groupId, parentMessageId,
-					serviceContext);
-			}
 
 			MBMessage message = null;
 

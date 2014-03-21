@@ -212,10 +212,7 @@ public class MessageListenerImpl implements MessageListener {
 
 			ServiceContext serviceContext = new ServiceContext();
 
-			MBUtil.permissionInheritance(
-				company.getCompanyId(), groupId, parentMessageId,
-				serviceContext);
-
+			serviceContext.setAttribute("propagatePermissions", Boolean.TRUE);
 			serviceContext.setLayoutFullURL(
 				PortalUtil.getLayoutFullURL(
 					groupId, PortletKeys.MESSAGE_BOARDS));

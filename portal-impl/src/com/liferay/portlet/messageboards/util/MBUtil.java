@@ -957,7 +957,8 @@ public class MBUtil {
 			groupId);
 
 		long[] roleIds = new long[] {
-			guestRole.getRoleId(), defaultGroupRole.getRoleId()};
+			guestRole.getRoleId(), defaultGroupRole.getRoleId()
+		};
 
 		List<String> actionIds = ResourceActionsUtil.getModelResourceActions(
 			MBMessage.class.getName());
@@ -981,7 +982,7 @@ public class MBUtil {
 		}
 		else {
 			serviceContext.setGuestPermissions(
-				guestActionIds.toArray(new String[]{}));
+				guestActionIds.toArray(new String[guestActionIds.size()]));
 		}
 
 		if (defaultGroupActionIds == null) {
@@ -989,7 +990,8 @@ public class MBUtil {
 		}
 		else {
 			serviceContext.setGroupPermissions(
-				defaultGroupActionIds.toArray(new String[]{}));
+				defaultGroupActionIds.toArray(
+					new String[defaultGroupActionIds.size()]));
 		}
 	}
 
